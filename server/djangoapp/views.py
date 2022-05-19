@@ -92,7 +92,53 @@ def get_dealerships(request):
 # Create a `get_dealer_details` view to render the reviews of a dealer
 # def get_dealer_details(request, dealer_id):
 # ...
+def get_dealer_details(request, dealer_id):
+    context = {}
+    context['dealer_id'] = dealer_id
+    if request.method == "GET":
+        # my url
+        url = "https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/review?dealerId="+str(dealer_id)
+        reviews = get_dealer_reviews_from_cf(url, dealer_id)
+        context['reviews'] = reviews
+        return render(request, 'djangoapp/dealer_details.html', context)
+        # return error message if dealerId is not a nummeric value
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    context = {}
+    context['dealer_id'] = dealer_id
+    
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            url = "https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/dealerships"
+            # Get dealers from the URL
+            dealerships = get_dealers_from_cf(url)
+            cars = CarModel.objects.filter(dealer_id=dealer_id)
+            for dealership in dealerships:
+                if dealership.id == dealer_id:
+                    context['dealer'] = dealership
+            context['cars'] = cars
+            return render(request, 'djangoapp/add_review.html', context)
+        if request.method == 'POST':
+            url = 'https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/review'
+            review = {}
+            # append data to review
+            review['id'] = random.randint(100, 1000000000)
+            review["time"] = datetime.utcnow().isoformat()
+            review['name'] = 'test name'
+            review['dealership'] = dealer_id
+            review['review'] = request.POST.get('review')
+            car = get_object_or_404(CarModel, id=request.POST.get('car'))
+            
+            review['purchase'] = bool(request.POST.get('purchasecheck', False))
+            review['another'] = 'another'
+            review['purchase_date'] = request.POST.get('purchasedate')
+            review['car_make'] = car.car_make.name
+            review['car_model'] = car.name
+            review['car_year'] = car.year.strftime("%Y")
+
+            json_data = {}
+            json_data['review'] = review
+            response = post_request(url, json_payload=json_data, dealer_id=dealer_id)
+            return redirect("djangoapp:dealer_reviews", dealer_id=dealer_id)
