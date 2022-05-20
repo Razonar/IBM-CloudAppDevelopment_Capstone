@@ -96,8 +96,7 @@ def get_dealer_details(request, dealer_id):
     context = {}
     context['dealer_id'] = dealer_id
     if request.method == "GET":
-        # my url
-        url = "https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/review?dealerId="+str(dealer_id)
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/mathcalc%40msn.com_djangoserver-space/DevOpCapstone/getreview?dealerId="+str(dealer_id)
         reviews = get_dealer_reviews_from_cf(url, dealer_id)
         context['reviews'] = reviews
         return render(request, 'djangoapp/dealer_details.html', context)
@@ -111,7 +110,7 @@ def add_review(request, dealer_id):
     
     if request.user.is_authenticated:
         if request.method == 'GET':
-            url = "https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/dealerships"
+            url = "https://us-south.functions.appdomain.cloud/api/v1/web/mathcalc%40msn.com_djangoserver-space/DevOpCapstone/dealerships"
             # Get dealers from the URL
             dealerships = get_dealers_from_cf(url)
             cars = CarModel.objects.filter(dealer_id=dealer_id)
@@ -121,7 +120,7 @@ def add_review(request, dealer_id):
             context['cars'] = cars
             return render(request, 'djangoapp/add_review.html', context)
         if request.method == 'POST':
-            url = 'https://xxx.us-south.apigw.appdomain.cloud/api/dealerships/review'
+            url = 'https://us-south.functions.appdomain.cloud/api/v1/web/mathcalc%40msn.com_djangoserver-space/DevOpCapstone/add-reviews'
             review = {}
             # append data to review
             review['id'] = random.randint(100, 1000000000)
