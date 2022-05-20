@@ -1,5 +1,5 @@
 # IBM Action, method=POST, Python 3.9
-# API xxx
+# API https://4ea3b251.us-south.apigw.appdomain.cloud/postreview
 # Params
 # {
 # "review": 
