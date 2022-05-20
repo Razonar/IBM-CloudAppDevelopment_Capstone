@@ -1,4 +1,4 @@
-# IBM Action, method=GET, Python 3.9
+# IBM Action, method=POST, Python 3.9
 # API xxx
 # Params
 # {
