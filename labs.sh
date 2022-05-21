@@ -6,16 +6,20 @@
 git clone https://github.com/Razonar/IBM-CloudAppDevelopment_Capstone
 cd IBM-CloudAppDevelopment_Capstone/server
 pip3 install -r requirements.txt
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver
+
+# Delete "db.sqllite3".
+python3 manage.py makemigrations 
+python3 manage.py migrate --run-syncdb
+# or python3 manage.py migrate 
+
+python3 manage.py createsuperuser
 
 # Launch Application with port server 8000
 # add the /djangoapp to the path
+python3 manage.py runserver
 
 ibmcloud login --no-region -u mathcalc@msn.com
 ibmcloud account orgs
-
 ibmcloud target --cf-api https://api.REGION.cf.cloud.ibm.com -r REGION -o ACCOUNTOWNER
 ibmcloud cf install
 
@@ -49,7 +53,7 @@ pip3 install -r requirements.txt
 python3 manage.py createsuperuser
 python3 manage.py runserver
 
-# Lab 2: Implement IBM Cloud Function Endpoints
+# Lab 3: Implement IBM Cloud Function Endpoints
 #######################################
 
 git clone https://github.com/Razonar/IBM-CloudAppDevelopment_Capstone
@@ -66,3 +70,9 @@ cat ./dealerships.json | couchimport --type "json" --jsonpath "dealerships.*" --
 cat ./reviews.json | couchimport --type "json" --jsonpath "reviews.*" --database reviews
 
 couchimport
+
+
+# Lab 5: Containerize your application
+#######################################
+
+
