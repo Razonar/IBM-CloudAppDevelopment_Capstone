@@ -5,7 +5,7 @@ import logging
 import time
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+# Doesn't work: from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
 
@@ -129,7 +129,8 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 def analyze_review_sentiments(argtext):
     url = "xxx"
     api_key = "xxx"
-    authenticator = IAMAuthenticator(api_key)
+    #  --------------> authenticator = IAMAuthenticator(api_key)
+    authenticator = ""
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)
     text=argtext+"hello, hello, hello."
