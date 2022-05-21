@@ -29,31 +29,33 @@ class CarModel(models.Model):
     make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)  
     name = models.CharField(null=False, max_length=40, default='undefined')
     id = models.IntegerField(default=1,primary_key=True)        
-    
+
     # One way -------------------
-    car_type = models.CharField(max_length=200, choices=[('Sedan', 'sedan'), ('SUV', 'suv'), ('WAGON', 'wagon')])
+    # car_type = models.CharField(max_length=20, choices=[('Sedan', 'sedan'), ('SUV', 'suv'), ('WAGON', 'wagon')])
 
     # Another way -------------------
-    TYPE_CHOICES = [('Sedan', 'sedan'), ('SUV', 'suv'), ('WAGON', 'wagon')]
+    type = models.CharField(
+        null=False,
+        max_length=20,
+        choices=[('Sedan', 'sedan'), ('SUV', 'suv'), ('WAGON', 'wagon')],
+        default='Sedan'
+    )
     
-    year = models.DateField()
-    def __str__(self) -> str:
-        return super().__str__()
+    year = models.DateTimeField('date designed')
+    def __str__(self):
+        return self.type
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
-    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip, state):
+    def __init__(self, address, city, full_name, id, lat, long, st, zip):
         self.address = address
         self.city = city
-        self.full_name = full_name
+        self.full_name=full_name
         self.id = id
         self.lat = lat
         self.long = long
-        self.short_name = short_name
         self.st = st
         self.zip = zip
-        self.state = state
-    # - __str__ method to print a car make object
     def __str__(self):
         return "Dealer name: " + self.full_name
 
@@ -78,7 +80,6 @@ class DealerReview:
         return json.dumps(self, default=lambda o: o.__dict__,
                             sort_keys=True, indent=4)
 
-# Another way, can't make DealerReview works
 class ReviewPost:
     def __init__(self, dealership, name, purchase, review):
         # Required attributes
@@ -91,7 +92,6 @@ class ReviewPost:
         self.car_make = ""
         self.car_model = ""
         self.car_year = ""
-    # - needs to_json
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                             sort_keys=True, indent=4)
