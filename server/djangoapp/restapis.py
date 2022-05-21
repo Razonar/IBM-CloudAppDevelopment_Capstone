@@ -23,8 +23,7 @@ def get_request(url, **kwargs):
             params["version"] = kwargs["version"]
             params["features"] = kwargs["features"]
             params["return_analyzed_text"] = kwargs["return_analyzed_text"]
-            response = requests.get(url, params=params, 
-                                    headers={'Content-Type': 'application/json'},
+            response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
                                     auth=HTTPBasicAuth('apikey', api_key))
         else:
             # Call get method of requests library with URL and parameters
@@ -62,16 +61,11 @@ def get_dealers_from_cf(url, **kwargs):
     else:
         json_result = get_request(url)
     if json_result:
-        # Get the row list in JSON as dealers
         dealers = json_result["body"]["rows"]
-        # For each dealer object
         for dealer in dealers:
-            # Get its content in `doc` object
             dealer_doc = dealer["doc"]
-            # Create a CarDealer object with values in `doc` object
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                                   full_name=dealer_doc["full_name"], id=dealer_doc["id"], 
-                                   lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                   full_name=dealer_doc["full_name"], id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
                                    st=dealer_doc["st"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
     return results
@@ -86,9 +80,8 @@ def get_dealer_by_id_from_cf(url, id):
         dealers = json_result["body"]
         dealer_doc = dealers["docs"][0]
         dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                               full_name=dealer_doc["full_name"], id=dealer_doc["id"], 
-                               lat=dealer_doc["lat"], long=dealer_doc["long"],
-                               st=dealer_doc["st"], zip=dealer_doc["zip"])
+                                full_name=dealer_doc["full_name"], id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                st=dealer_doc["st"], zip=dealer_doc["zip"])
     return dealer_obj
 
 def get_dealer_reviews_from_cf(url, **kwargs):
@@ -103,9 +96,9 @@ def get_dealer_reviews_from_cf(url, **kwargs):
         reviews = json_result["body"]["data"]["docs"]
         for dealer_review in reviews:
             review_obj = DealerReview(dealership=dealer_review["dealership"],
-                                      name=dealer_review["name"],
-                                      purchase=dealer_review["purchase"],
-                                      review=dealer_review["review"])
+                                   name=dealer_review["name"],
+                                   purchase=dealer_review["purchase"],
+                                   review=dealer_review["review"])
             if "id" in dealer_review:
                 review_obj.id = dealer_review["id"]
             if "purchase_date" in dealer_review:
@@ -127,17 +120,15 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or
 def analyze_review_sentiments(argtext):
-#    url = "xxx"
-#    api_key = "xxx"
-#    authenticator = IAMAuthenticator(api_key)
-#    authenticator = ""
-#    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
-#    natural_language_understanding.set_service_url(url)
-#    text=argtext+"hello, hello, hello."
-#    response = natural_language_understanding.analyze(text,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result()
-#    label=json.dumps(response, indent=2)
-#    label = response['sentiment']['document']['label']
-    label = ""
+    api_key = "UE3GIhhLdRnsF9FRr4nTheUGx2VVJWPsM0hxhMSb8qZ2"
+    url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/db60ab2c-1cb1-4813-89a1-64c6d7b148fc"
+    authenticator = IAMAuthenticator(api_key)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
+    natural_language_understanding.set_service_url(url)
+    text=argtext+"hello, hello, hello."
+    response = natural_language_understanding.analyze(text,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result()
+    label=json.dumps(response, indent=2)
+    label = response['sentiment']['document']['label']
     return(label)
 
 #Call reviews db and return count of reviewsdict
