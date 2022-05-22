@@ -2,7 +2,7 @@
 # API https://4ea3b251.us-south.apigw.appdomain.cloud/getreview
 # Params
 # {
-#     "id": 15
+#     "id": "15"
 # }
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -18,9 +18,9 @@ def main(dict):
     # my COUCH_URL
     service.set_service_url("https://ab9a3133-c458-4795-8041-55b2ad164a33-bluemix.cloudantnosqldb.appdomain.cloud")
     response = service.post_find(
-    db='reviews',
-    selector={'dealership': {'$eq': int(dict["id"])}},
-    ).get_result()
+        db='reviews',
+        selector={'dealership': {'$eq': int(dict["id"])}},
+        ).get_result()
     try:
         result= {
         'headers': {'Content-Type':'application/json'},
