@@ -1,4 +1,4 @@
-# IBM Action, method=POST, Python 3.9
+# IBM Action, method=GET, Python 3.9
 # API https://4ea3b251.us-south.apigw.appdomain.cloud/postreview
 # Params
 # {
@@ -17,6 +17,10 @@
 #     }
 # }
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+import sys
+from ibmcloudant.cloudant_v1 import CloudantV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 import sys
 from ibmcloudant.cloudant_v1 import CloudantV1
