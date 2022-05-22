@@ -1,4 +1,4 @@
-# IBM Action, method=POST, Python 3.9
+# IBM Action, method=GET, Python 3.9
 # API https://4ea3b251.us-south.apigw.appdomain.cloud/getreview
 # Params
 # {
