@@ -5,9 +5,9 @@ import logging
 import time
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
-# from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-# from ibm_watson import NaturalLanguageUnderstandingV1
-# from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
@@ -65,7 +65,8 @@ def get_dealers_from_cf(url, **kwargs):
         for dealer in dealers:
             dealer_doc = dealer["doc"]
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                                   full_name=dealer_doc["full_name"], id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                   full_name=dealer_doc["full_name"], id=dealer_doc["id"], 
+                                   lat=dealer_doc["lat"], long=dealer_doc["long"],
                                    st=dealer_doc["st"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
     return results
@@ -80,8 +81,9 @@ def get_dealer_by_id_from_cf(url, id):
         dealers = json_result["body"]
         dealer_doc = dealers["docs"][0]
         dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                                full_name=dealer_doc["full_name"], id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
-                                st=dealer_doc["st"], zip=dealer_doc["zip"])
+                               full_name=dealer_doc["full_name"], id=dealer_doc["id"], 
+                               lat=dealer_doc["lat"], long=dealer_doc["long"],
+                               st=dealer_doc["st"], zip=dealer_doc["zip"])
     return dealer_obj
 
 def get_dealer_reviews_from_cf(url, **kwargs):
