@@ -28,6 +28,7 @@ def contact(request):
         return render(request, 'djangoapp/contact.html', context)
 
 # Create a `login_request` view to handle sign in request
+def login_request(request):
     context = {}
     if request.method == "POST":
         username = request.POST['username']
