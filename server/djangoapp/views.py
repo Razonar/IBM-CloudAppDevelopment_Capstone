@@ -28,43 +28,32 @@ def contact(request):
         return render(request, 'djangoapp/contact.html', context)
 
 # Create a `login_request` view to handle sign in request
-# ###############################
-def login_request(request):
     context = {}
     if request.method == "POST":
-        # pull from dictionary
         username = request.POST['username']
         password = request.POST['psw']
-        # check auth
-        user = authenticate(username=username, password=password) 
+        user = authenticate(username=username, password=password)
         if user is not None:
-            # login if valid
             login(request, user)
-            return render(request, 'djangoapp/index.html', context)
+            return redirect('djangoapp:index')
         else:
-            return render(request, 'djangoapp/index.html', context)
+            context['message'] = "Invalid username or password."
+            return render(request, 'djangoapp/login.html', context)
     else:
-        return render(request, 'djangoapp/index.html', context)
+        return render(request, 'djangoapp/login.html', context)
 
 # Create a `logout_request` view to handle sign out request
-# ###############################
 def logout_request(request):
-    context = {}
-    # get user from session id
-    print("Log out the user `{}`".format(request.user.username))
+    print("Logging out `{}`...".format(request.user.username))
     logout(request)
-    # redirect back to the index.html
-    return render(request, 'djangoapp/index.html', context)
+    return redirect('djangoapp:index')
 
 # Create a `registration_request` view to handle sign up request
-# ###############################
 def registration_request(request):
     context = {}
-    # rend if it is a GET req
     if request.method == 'GET':
         return render(request, 'djangoapp/registration.html', context)
     elif request.method == 'POST':
-        # get user info
         username = request.POST['username']
         password = request.POST['psw']
         first_name = request.POST['firstname']
@@ -76,12 +65,12 @@ def registration_request(request):
         except:
             logger.debug("{} is new user".format(username))
         if not user_exist:
-            # create new user
-            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password)
+            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
+                                            password=password)
             login(request, user)
-            return render(request, 'djangoapp/index.html', context)
+            return redirect("/djangoapp/")
         else:
-            return render(request, 'djangoapp/index.html', context)
+            return render(request, 'djangoapp/registration.html', context)
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
@@ -96,30 +85,28 @@ def get_dealerships(request):
 # def get_dealer_details(request, dealer_id):
 # ...
 def get_dealer_details(request, id):
-    dealer_url      = "https://4ea3b251.us-south.apigw.appdomain.cloud/dealerships/dealerships"
-    review_post_url = "https://4ea3b251.us-south.apigw.appdomain.cloud/postreview/postreview"
-    review_url      = "https://4ea3b251.us-south.apigw.appdomain.cloud/getreview/getreview"
+    dealer_url     = "https://4ea3b251.us-south.apigw.appdomain.cloud/dealerships/dealerships"
+    postreview_url = "https://4ea3b251.us-south.apigw.appdomain.cloud/postreview/postreview"
+    getreview_url  = "https://4ea3b251.us-south.apigw.appdomain.cloud/getreview/getreview"
     if request.method == "GET":
         context = {}
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
         context["dealer"] = dealer
-        reviews = get_dealer_reviews_from_cf(review_url, id=id)
+        reviews = get_dealer_reviews_from_cf(getreview_url, id=id)
         print(reviews)
         context["reviews"] = reviews
         return render(request, 'djangoapp/dealer_details.html', context)
-        # return error message if dealerId is not a nummeric value
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 def add_review(request, id):
     dealer_url      = "https://4ea3b251.us-south.apigw.appdomain.cloud/dealerships/dealerships"
-    review_post_url = "https://4ea3b251.us-south.apigw.appdomain.cloud/postreview/postreview"
-    review_url      = "https://4ea3b251.us-south.apigw.appdomain.cloud/getreview/getreview"
+    postreview_url  = "https://4ea3b251.us-south.apigw.appdomain.cloud/postreview/postreview"
+    getreview_url   = "https://4ea3b251.us-south.apigw.appdomain.cloud/getreview/getreview"
     context = {}
     dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
     context["dealer"] = dealer
     if request.method == 'GET':
-        # Get cars for the dealer
         cars = CarModel.objects.all()
         print(cars)
         context["cars"] = cars
@@ -146,6 +133,5 @@ def add_review(request, id):
             payload["car_year"] = int(car.year.strftime("%Y"))
             new_payload = {}
             new_payload["review"] = payload
-            post_request(review_post_url, new_payload, id=id)
+            post_request(postreview_url, new_payload, id=id)
         return redirect("djangoapp:dealer_details", id=id)
-
