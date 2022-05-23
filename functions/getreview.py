@@ -2,7 +2,7 @@
 # API https://4ea3b251.us-south.apigw.appdomain.cloud/getreview/getreview
 # Params
 # {
-#     "id": "15"
+#     "id": 15
 # }
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
