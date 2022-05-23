@@ -87,7 +87,7 @@ def registration_request(request):
 def get_dealerships(request):
     if request.method == "GET":
         context = {}
-        url = "https://4ea3b251.us-south.apigw.appdomain.cloud/dealerships"
+        url = "https://4ea3b251.us-south.apigw.appdomain.cloud/dealerships/dealerships"
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
@@ -96,9 +96,9 @@ def get_dealerships(request):
 # def get_dealer_details(request, dealer_id):
 # ...
 def get_dealer_details(request, id):
-    dealer_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/dealerships"
-    review_post_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/postreview"
-    review_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/getreview"
+    dealer_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/dealerships/dealerships"
+    review_post_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/postreview/postreview"
+    review_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/getreview/getreview"
     if request.method == "GET":
         context = {}
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
@@ -112,9 +112,9 @@ def get_dealer_details(request, id):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 def add_review(request, id):
-    dealer_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/dealerships"
-    review_post_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/postreview"
-    review_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/getreview"
+    dealer_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/dealerships/dealerships"
+    review_post_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/postreview/postreview"
+    review_url = "https://4ea3b251.eu-gb.apigw.appdomain.cloud/getreview/getreview"
     context = {}
     dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
     context["dealer"] = dealer
